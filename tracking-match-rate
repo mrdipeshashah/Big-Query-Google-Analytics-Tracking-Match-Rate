@@ -1,0 +1,8 @@
+SELECT
+  Date,
+  Shopify_Revenue,
+  GA_Revenue,
+  (Shopify_Revenue - GA_Revenue) AS Revenue_Difference,
+  IF(Shopify_Revenue > 0, GA_Revenue / Shopify_Revenue, 0) AS Match_Rate
+FROM
+  `mrdipeshashah.lookerstudiodashboards.MatchRate_GoogleAnalytics_Shopify`
