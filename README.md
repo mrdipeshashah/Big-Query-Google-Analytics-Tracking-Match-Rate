@@ -11,7 +11,7 @@ To provide automated, daily visibility into data discrepancies between Shopify (
 
 ## DATA REQUIREMENTS & PREREQUISITES
 
-The match rate view a daily-aggregated brreakdown of matched dates and raw revenue numbers from Google Analytics and Shopify or Stripe or any other E-commerce Platform. 
+To build a match rate view it requires a daily-aggregated breakdown of matched dates and raw revenue numbers from Google Analytics and Shopify or Stripe or any other E-commerce Platform. 
 
 ### Schema Requirements
 | Column Name | Data Type | Description |
