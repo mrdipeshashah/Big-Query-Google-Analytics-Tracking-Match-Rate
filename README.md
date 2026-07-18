@@ -1,15 +1,17 @@
-# Shopify vs. GA4 Revenue Match Rate Dashboard
+# OVERVIEW
 
-This repository contains the data requirements, BigQuery SQL architecture, and Looker Studio metric configurations for monitoring the revenue tracking health between Shopify and Google Analytics 4 (GA4).
+This repository contains the data requirements, BigQuery SQL architecture, and Data Studio configurations for monitoring the revenue tracking health between Shopify (or any other E-commerce platform) v Google Analytics 4 (GA4).
+
+## DASHBOARD
+
+To track match rate this dashboard (https://datastudio.google.com/reporting/871d3ef2-a853-49ef-94c1-4bbd9bfb1608) helps bring the insights to life. 
 
 ## Objective
-To provide automated, daily visibility into data discrepancies between Shopify (source of truth) and GA4 (marketing attribution). This pipeline highlights tracking failures (e.g., pixel drops, broken cookie consent, checkout scripting issues) when the daily match rate drops below the target threshold of **90%**.
+To provide automated, daily visibility into data discrepancies between Shopify (source of truth) and GA4 (marketing attribution). This pipeline highlights tracking failures when the daily match rate drops below the target threshold of **90%**.
 
----
+## DATA REQUIREMENTS & PREREQUISITES
 
-## 📋 1. Data Requirements & Prerequisites
-
-The pipeline expects a daily-aggregated source table containing matched dates and raw revenue numbers from both systems.
+The match rate view a daily-aggregated brreakdown of matched dates and raw revenue numbers from Google Analytics and Shopify or Stripe or any other E-commerce Platform. 
 
 ### Schema Requirements
 | Column Name | Data Type | Description |
@@ -18,30 +20,7 @@ The pipeline expects a daily-aggregated source table containing matched dates an
 | `Shopify_Revenue` | FLOAT64 / NUMERIC | Total gross/net revenue recorded in Shopify (Source of Truth). |
 | `GA_Revenue` | FLOAT64 / NUMERIC | Total purchase revenue recorded in Google Analytics 4. |
 
----
-
-## 💻 2. BigQuery Data Transformation (SQL View)
-
-To optimize performance and avoid redundant calculated fields in the visualization layer, the raw metrics are transformed via a BigQuery View. 
-
-Run the following query in your Google Cloud Console and save it as a View (e.g., `v_MatchRate_Dashboard`):
-
-```sql
-SELECT
-  Date,
-  Shopify_Revenue,
-  GA_Revenue,
-  -- Calculate the exact absolute monetary gap
-  (Shopify_Revenue - GA_Revenue) AS Revenue_Difference,
-  -- Calculate match rate percentage; handles division by zero safely
-  IF(Shopify_Revenue > 0, GA_Revenue / Shopify_Revenue, 0) AS Match_Rate
-FROM
-  `mrdipeshashah.lookerstudiodashboards.MatchRate_GoogleAnalytics_Shopify`
-```
-
----
-
-## 🧮 3. Calculated Fields & Logic
+## CALULATED FIELDS & LOGIC
 
 *   **Revenue Difference (£):** 
     `Shopify_Revenue - GA_Revenue`
@@ -50,11 +29,9 @@ FROM
     `GA_Revenue / Shopify_Revenue`
     *Represents the efficiency of the tracking setup. The target operational benchmark is >= 90%.*
 
----
+## DATA STUDIO DASHBOARD CONFIGURATION
 
-## 🎨 4. Looker Studio Dashboard Configuration
-
-Connect Looker Studio directly to your saved BigQuery View and configure the following components:
+Connect Data Studio directly to the saved BigQuery View and configure the following components:
 
 ### Summary Scorecards (Top Row)
 1.  **Average Match Rate**
