@@ -29,32 +29,4 @@ To build a match rate view it requires a daily-aggregated breakdown of matched d
     `GA_Revenue / Shopify_Revenue`
     *Represents the efficiency of the tracking setup. The target operational benchmark is >= 90%.*
 
-## DATA STUDIO DASHBOARD CONFIGURATION
 
-Connect Data Studio directly to the saved BigQuery View and configure the following components:
-
-### Summary Scorecards (Top Row)
-1.  **Average Match Rate**
-    *   **Metric:** `Match_Rate` (Aggregation: `Average`, Format: `Percent`)
-    *   **Conditional Formatting:** Background fills **Green** if value is >= 0.90.
-2.  **Total Discrepancy**
-    *   **Metric:** `Revenue_Difference` (Aggregation: `Sum`, Format: `Currency GBP`)
-3.  **Tracking Alert Days**
-    *   **Metric:** `Date` (Aggregation: `Count Distinct`)
-    *   **Missing Data Setting:** Select **"Show 0"** (ensures a clean `0` displays on perfect tracking weeks instead of a blank box).
-    *   **Filter Panel:** Add an inline chart filter: `Include Match_Rate Less than (<) 0.9`
-    *   **Conditional Formatting:** Background fills **Red** if value is > 0.
-
-### Main Visualization: Combo Chart
-*   **Title:** `DAILY TRACKING HEALTH AND REVENUE DISCREPANCY`
-*   **Dimension:** `Date` (Granularity: `Day`)
-*   **Metrics:** 
-    *   `Match_Rate` -> Style: **Line** (Plot on **Left Axis**; Axis Min: `0.70`, Axis Max: `1.00`)
-    *   `Revenue_Difference` -> Style: **Bars** (Plot on **Right Axis**)
-*   **Reference Line:** Add a constant metric reference line on the Left Y-Axis at `0.90`, labeled **"Baseline"**.
-
-### Action Item Table (Audit Log)
-*   **Title:** `TRACKING FAILURES AND HIGH DISCREPANCY AUDIT LOG`
-*   **Dimensions:** `Date`, `Shopify_Revenue`, `Google Analytics Revenue`, `Revenue_Difference`, `Match_Rate`
-*   **Sorting:** `Revenue_Difference` (Descending)
-*   **Table Filter:** Reuse the `Match_Rate < 0.9` filter to isolate and surface only the days requiring dev team investigation.
